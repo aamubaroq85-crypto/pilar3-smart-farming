@@ -11,6 +11,81 @@ st.set_page_config(
 # ==========================================
 # ZUHRI FORMALISM ENGINES
 # ==========================================
+
+class ZuhriPillarI:
+    """Engine Pilar I: Manajemen Tanah & Nutrisi Presisi"""
+    def __init__(self, pi_eff: float = 3.141592653589793):
+        self.pi_eff = pi_eff
+
+    def calculate_humic_synthesis(self, organic_matter_pct: float, soil_ph: float, 
+                                 moisture_pct: float) -> dict:
+        """Bio-Resonance Humic Synthesizer (1)"""
+        # Indeks Resonansi pH terhadap titik netral (7.0)
+        ph_resonance = math.exp(-abs(soil_ph - 7.0) / self.pi_eff)
+        
+        # Laju Sintesis Asam Humat (kg/ha/hari)
+        humic_synth_rate = (organic_matter_pct * (moisture_pct / 100.0) * self.pi_eff) * ph_resonance
+        
+        # Indeks Stabilitas Struktur Pori Bedengan
+        pore_stability_index = (humic_synth_rate * soil_ph) / self.pi_eff
+
+        return {
+            "ph_resonance_factor": round(ph_resonance, 4),
+            "humic_synthesis_rate_kg_ha": round(humic_synth_rate, 2),
+            "pore_stability_index": round(pore_stability_index, 2)
+        }
+
+    def calculate_nutrient_availability(self, npk_input_kg: float, ec_tanah: float, 
+                                        moisture_pct: float) -> dict:
+        """Organic-Spectrum Nutrient Enhancer (5)"""
+        # Indeks Kelarutan Ionik Hara
+        ionic_solubility = (ec_tanah * (moisture_pct / 100.0) * self.pi_eff)
+        
+        # Serapan Nutrisi Efektif oleh Akar (Kg)
+        effective_npk_absorbed = npk_input_kg * (1 - math.exp(-ionic_solubility / 5.0))
+        
+        # Efisiensi Serapan (%)
+        absorption_efficiency = (effective_npk_absorbed / npk_input_kg) * 100 if npk_input_kg > 0 else 0.0
+
+        return {
+            "ionic_solubility_index": round(ionic_solubility, 3),
+            "effective_npk_absorbed_kg": round(effective_npk_absorbed, 2),
+            "absorption_efficiency_pct": round(absorption_efficiency, 2)
+        }
+
+
+class ZuhriPillarII:
+    """Engine Pilar II: Pengendalian Hama & Penyakit Geometris"""
+    def __init__(self, pi_eff: float = 3.141592653589793):
+        self.pi_eff = pi_eff
+
+    def calculate_efficacy(self, base_dose: float, surface_tension: float, 
+                           vpd_kpa: float, spray_pressure_bar: float) -> dict:
+        """Bio-Pesticide Efficacy Amplifier (30)"""
+        penetration_factor = (spray_pressure_bar * math.log(self.pi_eff + 1)) / (surface_tension + 0.1)
+        efficacy_boost = (penetration_factor * self.pi_eff) / (vpd_kpa + 0.5)
+        effective_dose = base_dose * (1 / (1 + math.exp(-efficacy_boost / 10)))
+
+        return {
+            "penetration_factor": round(penetration_factor, 3),
+            "efficacy_boost_percent": round(efficacy_boost * 100, 2),
+            "optimized_dose_ml_per_l": round(effective_dose, 2)
+        }
+
+    def calculate_spore_disruption(self, humidity_rh: float, temp_c: float, 
+                                  spore_density_index: float) -> dict:
+        """Fungal Spore Resonance Disruptor (26)"""
+        fungal_risk = (humidity_rh * temp_c * spore_density_index) / (self.pi_eff * 100)
+        disruption_freq_khz = (fungal_risk * self.pi_eff * 12.5)
+        radiation_duration_min = (fungal_risk / self.pi_eff) * 15
+
+        return {
+            "fungal_risk_index": round(fungal_risk, 2),
+            "disruption_frequency_khz": round(disruption_freq_khz, 2),
+            "recommended_duration_min": round(min(radiation_duration_min, 120.0), 1)
+        }
+
+
 class ZuhriPillarIII:
     """Engine Pilar III: Irigasi, Mikroklimat & Pemantauan Rutin"""
     def __init__(self, pi_eff: float = 3.141592653589793):
@@ -18,6 +93,7 @@ class ZuhriPillarIII:
 
     def calculate_daily_flux(self, temp_c: float, rh_percent: float, 
                              solar_rad: float, soil_ec: float) -> dict:
+        """Daily Routine Flux Variable Monitor (51)"""
         rh_ratio = rh_percent / 100.0
         vps = 0.61078 * math.exp((17.27 * temp_c) / (temp_c + 237.3))
         vpa = vps * rh_ratio
@@ -37,6 +113,7 @@ class ZuhriPillarIII:
         }
 
     def predict_yield(self, lai: float, flux_data: dict, land_area_m2: float) -> dict:
+        """Real-Time Yield Predictive Algorithm (71)"""
         phi_trans = flux_data.get("phi_transpiration", 0.0)
         s_soil = flux_data.get("soil_entropy_index", 0.0)
 
@@ -56,42 +133,18 @@ class ZuhriPillarIII:
         }
 
 
-class ZuhriPillarII:
-    """Engine Pilar II: Pengendalian Hama & Penyakit Geometris"""
-    def __init__(self, pi_eff: float = 3.141592653589793):
-        self.pi_eff = pi_eff
-
-    def calculate_efficacy(self, base_dose: float, surface_tension: float, 
-                           vpd_kpa: float, spray_pressure_bar: float) -> dict:
-        penetration_factor = (spray_pressure_bar * math.log(self.pi_eff + 1)) / (surface_tension + 0.1)
-        efficacy_boost = (penetration_factor * self.pi_eff) / (vpd_kpa + 0.5)
-        effective_dose = base_dose * (1 / (1 + math.exp(-efficacy_boost / 10)))
-
-        return {
-            "penetration_factor": round(penetration_factor, 3),
-            "efficacy_boost_percent": round(efficacy_boost * 100, 2),
-            "optimized_dose_ml_per_l": round(effective_dose, 2)
-        }
-
-    def calculate_spore_disruption(self, humidity_rh: float, temp_c: float, 
-                                  spore_density_index: float) -> dict:
-        fungal_risk = (humidity_rh * temp_c * spore_density_index) / (self.pi_eff * 100)
-        disruption_freq_khz = (fungal_risk * self.pi_eff * 12.5)
-        radiation_duration_min = (fungal_risk / self.pi_eff) * 15
-
-        return {
-            "fungal_risk_index": round(fungal_risk, 2),
-            "disruption_frequency_khz": round(disruption_freq_khz, 2),
-            "recommended_duration_min": round(min(radiation_duration_min, 120.0), 1)
-        }
-
 # ==========================================
 # STREAMLIT UI & NAVIGATION
 # ==========================================
+
 st.sidebar.title("🎮 Navigasi Modul")
 modul_pilihan = st.sidebar.radio(
     "Pilih Pilar Operasional:",
-    ["Pilar III: Irigasi & Pemantauan Rutin", "Pilar II: Proteksi Hama & Patogen"]
+    [
+        "Pilar III: Irigasi & Pemantauan Rutin", 
+        "Pilar II: Proteksi Hama & Patogen",
+        "Pilar I: Manajemen Tanah & Nutrisi"
+    ]
 )
 
 st.sidebar.markdown("---")
@@ -134,7 +187,7 @@ if modul_pilihan == "Pilar III: Irigasi & Pemantauan Rutin":
 # ------------------------------------------
 # MODUL 2: PILAR II
 # ------------------------------------------
-else:
+elif modul_pilihan == "Pilar II: Proteksi Hama & Patogen":
     st.title("🛡️ Smart Farming Engine: Pilar II")
     st.caption("Bio-Pesticide Efficacy Amplifier & Fungal Spore Resonance Disruptor (π_eff)")
 
@@ -173,3 +226,46 @@ else:
         st.warning("⚠️ **Peringatan Risiko Jamur Tinggi:** Diperlukan aktivasi pemancar frekuensi atau penyemprotan protektif segera.")
     else:
         st.success("✅ **Kondisi Aman:** Risiko infeksi spora patogen berada dalam batas ambang toleransi aman.")
+
+# ------------------------------------------
+# MODUL 3: PILAR I
+# ------------------------------------------
+else:
+    st.title("🪨 Smart Farming Engine: Pilar I")
+    st.caption("Bio-Resonance Humic Synthesizer & Organic-Spectrum Nutrient Enhancer (π_eff)")
+
+    st.sidebar.header("⚙️ Input Parameter Tanah & Nutrisi")
+    st.sidebar.subheader("1. Kondisi Fisik & Kimia Tanah")
+    baha_organik = st.sidebar.number_input("Bahan Organik / Kohe (%)", value=4.5, step=0.5)
+    ph_tanah = st.sidebar.number_input("pH Tanah", value=6.2, step=0.1)
+    kadar_air = st.sidebar.number_input("Kadar Air Tanah (%)", value=55.0, step=5.0)
+
+    st.sidebar.subheader("2. Aplikasi Nutrisi & Pupuk")
+    npk_input = st.sidebar.number_input("Input Pupuk Majemuk/NPK (kg/ha)", value=150.0, step=10.0)
+    ec_tanah_p1 = st.sidebar.number_input("EC Tanah (mS/cm)", value=1.8, step=0.1)
+
+    engine_p1 = ZuhriPillarI()
+    humic_data = engine_p1.calculate_humic_synthesis(baha_organik, ph_tanah, kadar_air)
+    nutrient_data = engine_p1.calculate_nutrient_availability(npk_input, ec_tanah_p1, kadar_air)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("🧪 Sintesis Asam Humat (Bedengan)")
+        st.metric("Laju Sintesis Humat", f"{humic_data['humic_synthesis_rate_kg_ha']} kg/ha/hari")
+        st.metric("Indeks Stabilitas Pori", humic_data["pore_stability_index"])
+        st.metric("Faktor Resonansi pH", humic_data["ph_resonance_factor"])
+
+    with col2:
+        st.subheader("⚡ Efisiensi Serapan Nutrisi (NPK)")
+        st.metric("Efisiensi Serapan Akar", f"{nutrient_data['absorption_efficiency_pct']} %")
+        st.metric("Serapan NPK Efektif", f"{nutrient_data['effective_npk_absorbed_kg']} kg/ha")
+        st.metric("Indeks Kelarutan Ionik", nutrient_data["ionic_solubility_index"])
+
+    st.markdown("---")
+    if ph_tanah < 5.5:
+        st.warning("⚠️ **Kondisi Tanah Asam:** Diperlukan penambahan dolomit/kapur pertanian untuk menaikkan faktor resonansi pH dan kelarutan NPK.")
+    elif ph_tanah > 7.5:
+        st.warning("⚠️ **Kondisi Tanah Basa:** Lakukan penambahan bahan organik/kohe matang untuk menyeimbangkan stabilitas pori.")
+    else:
+        st.success("✅ **Kondisi Zona Perakaran Ideal:** pH dan struktur tanah berada pada taraf efisiensi penyerapan hara maksimal.")
