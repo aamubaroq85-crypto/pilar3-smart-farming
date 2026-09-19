@@ -1,7 +1,6 @@
 import math
 import streamlit as st
 
-# Set Konfigurasi Halaman
 st.set_page_config(
     page_title="Smart Farming Engine - Integrated System",
     page_icon="🌱",
@@ -9,102 +8,71 @@ st.set_page_config(
 )
 
 # ==========================================
-# ZUHRI FORMALISM ENGINES
+# ZUHRI FORMALISM ENGINES (PILLAR I - IV)
 # ==========================================
 
 class ZuhriPillarI:
-    """Engine Pilar I: Manajemen Tanah & Nutrisi Presisi"""
     def __init__(self, pi_eff: float = 3.141592653589793):
         self.pi_eff = pi_eff
 
-    def calculate_humic_synthesis(self, organic_matter_pct: float, soil_ph: float, 
-                                 moisture_pct: float) -> dict:
-        """Bio-Resonance Humic Synthesizer (1)"""
-        # Indeks Resonansi pH terhadap titik netral (7.0)
+    def calculate_humic_synthesis(self, organic_matter_pct: float, soil_ph: float, moisture_pct: float) -> dict:
         ph_resonance = math.exp(-abs(soil_ph - 7.0) / self.pi_eff)
-        
-        # Laju Sintesis Asam Humat (kg/ha/hari)
         humic_synth_rate = (organic_matter_pct * (moisture_pct / 100.0) * self.pi_eff) * ph_resonance
-        
-        # Indeks Stabilitas Struktur Pori Bedengan
         pore_stability_index = (humic_synth_rate * soil_ph) / self.pi_eff
-
         return {
             "ph_resonance_factor": round(ph_resonance, 4),
             "humic_synthesis_rate_kg_ha": round(humic_synth_rate, 2),
             "pore_stability_index": round(pore_stability_index, 2)
         }
 
-    def calculate_nutrient_availability(self, npk_input_kg: float, ec_tanah: float, 
-                                        moisture_pct: float) -> dict:
-        """Organic-Spectrum Nutrient Enhancer (5)"""
-        # Indeks Kelarutan Ionik Hara
+    def calculate_nutrient_availability(self, npk_input_kg: float, ec_tanah: float, moisture_pct: float) -> dict:
         ionic_solubility = (ec_tanah * (moisture_pct / 100.0) * self.pi_eff)
-        
-        # Serapan Nutrisi Efektif oleh Akar (Kg)
         effective_npk_absorbed = npk_input_kg * (1 - math.exp(-ionic_solubility / 5.0))
-        
-        # Efisiensi Serapan (%)
         absorption_efficiency = (effective_npk_absorbed / npk_input_kg) * 100 if npk_input_kg > 0 else 0.0
-
         return {
             "ionic_solubility_index": round(ionic_solubility, 3),
             "effective_npk_absorbed_kg": round(effective_npk_absorbed, 2),
             "absorption_efficiency_pct": round(absorption_efficiency, 2)
         }
 
-
 class ZuhriPillarII:
-    """Engine Pilar II: Pengendalian Hama & Penyakit Geometris"""
     def __init__(self, pi_eff: float = 3.141592653589793):
         self.pi_eff = pi_eff
 
-    def calculate_efficacy(self, base_dose: float, surface_tension: float, 
-                           vpd_kpa: float, spray_pressure_bar: float) -> dict:
-        """Bio-Pesticide Efficacy Amplifier (30)"""
+    def calculate_efficacy(self, base_dose: float, surface_tension: float, vpd_kpa: float, spray_pressure_bar: float) -> dict:
         penetration_factor = (spray_pressure_bar * math.log(self.pi_eff + 1)) / (surface_tension + 0.1)
         efficacy_boost = (penetration_factor * self.pi_eff) / (vpd_kpa + 0.5)
         effective_dose = base_dose * (1 / (1 + math.exp(-efficacy_boost / 10)))
-
         return {
             "penetration_factor": round(penetration_factor, 3),
             "efficacy_boost_percent": round(efficacy_boost * 100, 2),
             "optimized_dose_ml_per_l": round(effective_dose, 2)
         }
 
-    def calculate_spore_disruption(self, humidity_rh: float, temp_c: float, 
-                                  spore_density_index: float) -> dict:
-        """Fungal Spore Resonance Disruptor (26)"""
+    def calculate_spore_disruption(self, humidity_rh: float, temp_c: float, spore_density_index: float) -> dict:
         fungal_risk = (humidity_rh * temp_c * spore_density_index) / (self.pi_eff * 100)
         disruption_freq_khz = (fungal_risk * self.pi_eff * 12.5)
         radiation_duration_min = (fungal_risk / self.pi_eff) * 15
-
         return {
             "fungal_risk_index": round(fungal_risk, 2),
             "disruption_frequency_khz": round(disruption_freq_khz, 2),
             "recommended_duration_min": round(min(radiation_duration_min, 120.0), 1)
         }
 
-
 class ZuhriPillarIII:
-    """Engine Pilar III: Irigasi, Mikroklimat & Pemantauan Rutin"""
     def __init__(self, pi_eff: float = 3.141592653589793):
         self.pi_eff = pi_eff
 
-    def calculate_daily_flux(self, temp_c: float, rh_percent: float, 
-                             solar_rad: float, soil_ec: float) -> dict:
-        """Daily Routine Flux Variable Monitor (51)"""
+    def calculate_daily_flux(self, temp_c: float, rh_percent: float, solar_rad: float, soil_ec: float) -> dict:
         rh_ratio = rh_percent / 100.0
         vps = 0.61078 * math.exp((17.27 * temp_c) / (temp_c + 237.3))
         vpa = vps * rh_ratio
         vpd = vps - vpa
-
         phi_trans = (solar_rad * vpd * self.pi_eff) / (rh_ratio + 0.1)
         v_xylem = (phi_trans * 0.75) / self.pi_eff
         v_phloem = (solar_rad * 0.25) * self.pi_eff
         vascular_ratio = v_xylem / (v_phloem if v_phloem != 0 else 1.0)
         s_soil = (soil_ec * temp_c) / self.pi_eff
-
         return {
             "vpd_kpa": round(vpd, 3),
             "phi_transpiration": round(phi_trans, 2),
@@ -113,17 +81,13 @@ class ZuhriPillarIII:
         }
 
     def predict_yield(self, lai: float, flux_data: dict, land_area_m2: float) -> dict:
-        """Real-Time Yield Predictive Algorithm (71)"""
         phi_trans = flux_data.get("phi_transpiration", 0.0)
         s_soil = flux_data.get("soil_entropy_index", 0.0)
-
         lai_eff = lai * math.log(self.pi_eff + 1)
         k_harvest = (lai_eff * phi_trans) / (self.pi_eff ** 2)
         delta_e = math.exp(-s_soil / (self.pi_eff * 10))
-
         yield_per_m2 = (k_harvest * delta_e) * 0.15
         total_yield_kg = yield_per_m2 * land_area_m2
-
         return {
             "effective_lai": round(lai_eff, 2),
             "harvest_index_k": round(k_harvest, 4),
@@ -132,6 +96,34 @@ class ZuhriPillarIII:
             "total_predicted_yield_kg": round(total_yield_kg, 2)
         }
 
+class ZuhriPillarIV:
+    def __init__(self, pi_eff: float = 3.141592653589793):
+        self.pi_eff = pi_eff
+
+    def calculate_yield_matrix(self, total_harvest_kg: float, price_per_kg: float) -> dict:
+        grade_a_pct = (1 - math.exp(-self.pi_eff)) * 100
+        grade_a_kg = total_harvest_kg * (grade_a_pct / 100.0)
+        gross_revenue = total_harvest_kg * price_per_kg
+        return {
+            "grade_a_percentage": round(grade_a_pct, 2),
+            "grade_a_kg": round(grade_a_kg, 2),
+            "gross_revenue_rp": gross_revenue
+        }
+
+    def route_distribution(self, gross_revenue: float, tabarot_pct: float) -> dict:
+        # Dana Sosial & Bantuan TABAROT
+        tabarot_fund = gross_revenue * (tabarot_pct / 100.0)
+        remaining = gross_revenue - tabarot_fund
+        
+        # Flux Balancer: 40% Reinvestasi Lahan, 60% Perencanaan Rumah Tangga
+        farm_reinvestment = remaining * 0.40
+        household_planning = remaining * 0.60
+        
+        return {
+            "tabarot_fund_rp": tabarot_fund,
+            "household_planning_rp": household_planning,
+            "farm_reinvestment_rp": farm_reinvestment
+        }
 
 # ==========================================
 # STREAMLIT UI & NAVIGATION
@@ -143,129 +135,104 @@ modul_pilihan = st.sidebar.radio(
     [
         "Pilar III: Irigasi & Pemantauan Rutin", 
         "Pilar II: Proteksi Hama & Patogen",
-        "Pilar I: Manajemen Tanah & Nutrisi"
+        "Pilar I: Manajemen Tanah & Nutrisi",
+        "Pilar IV: Logistik & Distribusi"
     ]
 )
 
 st.sidebar.markdown("---")
 
-# ------------------------------------------
-# MODUL 1: PILAR III
-# ------------------------------------------
 if modul_pilihan == "Pilar III: Irigasi & Pemantauan Rutin":
     st.title("🌱 Smart Farming Engine: Pilar III")
-    st.caption("Daily Routine Flux Variable Monitor & Real-Time Yield Predictive Algorithm (π_eff)")
-
     st.sidebar.header("⚙️ Input Parameter Lahan")
     suhu = st.sidebar.number_input("Suhu Udara (°C)", value=29.5, step=0.5)
     kelembapan = st.sidebar.number_input("Kelembapan Udara (RH %)", value=75.0, step=1.0)
     radiasi = st.sidebar.number_input("Radiasi Surya (MJ/m²/hari)", value=18.5, step=0.5)
     ec_tanah = st.sidebar.number_input("EC Tanah (mS/cm)", value=1.8, step=0.1)
-    lai = st.sidebar.number_input("Leaf Area Index (LAI)", value=3.2, step=0.1)
+    lai = st.sidebar.number_input("LAI", value=3.2, step=0.1)
     luas_lahan = st.sidebar.number_input("Luas Lahan (m²)", value=1000.0, step=50.0)
 
-    engine_p3 = ZuhriPillarIII()
-    flux_data = engine_p3.calculate_daily_flux(suhu, kelembapan, radiasi, ec_tanah)
-    yield_data = engine_p3.predict_yield(lai, flux_data, luas_lahan)
+    engine = ZuhriPillarIII()
+    flux = engine.calculate_daily_flux(suhu, kelembapan, radiasi, ec_tanah)
+    yield_est = engine.predict_yield(lai, flux, luas_lahan)
 
-    col1, col2 = st.columns(2)
+    c1, c2 = st.columns(2)
+    c1.metric("VPD (kPa)", flux["vpd_kpa"])
+    c1.metric("Fluks Transpirasi", flux["phi_transpiration"])
+    c2.metric("Estimasi Panen (Kg)", f"{yield_est['total_predicted_yield_kg']:,}")
+    c2.metric("Faktor Stres (ΔE)", yield_est["stress_correction_factor"])
 
-    with col1:
-        st.subheader("📊 Fluks Harian (Monitor)")
-        st.metric("VPD (kPa)", flux_data["vpd_kpa"])
-        st.metric("Fluks Transpirasi (Φ_trans)", flux_data["phi_transpiration"])
-        st.metric("Rasio Vaskular (Xylem/Phloem)", flux_data["vascular_ratio"])
-        st.metric("Indeks Entropi Tanah", flux_data["soil_entropy_index"])
-
-    with col2:
-        st.subheader("📈 Prediksi Panen (Real-Time)")
-        st.metric("Total Estimasi Panen (Kg)", f"{yield_data['total_predicted_yield_kg']:,} kg")
-        st.metric("Estimasi per m²", f"{yield_data['predicted_yield_per_m2_kg']} kg/m²")
-        st.metric("LAI Efektif", yield_data["effective_lai"])
-        st.metric("Faktor Koreksi Stres (ΔE)", yield_data["stress_correction_factor"])
-
-# ------------------------------------------
-# MODUL 2: PILAR II
-# ------------------------------------------
 elif modul_pilihan == "Pilar II: Proteksi Hama & Patogen":
     st.title("🛡️ Smart Farming Engine: Pilar II")
-    st.caption("Bio-Pesticide Efficacy Amplifier & Fungal Spore Resonance Disruptor (π_eff)")
+    st.sidebar.subheader("Input Semprot & Patogen")
+    dosis = st.sidebar.number_input("Dosis (ml/L)", value=2.0)
+    tegangan = st.sidebar.number_input("Tegangan (mN/m)", value=32.0)
+    tekanan = st.sidebar.number_input("Tekanan (Bar)", value=25.0)
+    vpd = st.sidebar.number_input("VPD Lahan", value=1.031)
+    rh = st.sidebar.number_input("RH (%)", value=75.0)
+    temp = st.sidebar.number_input("Suhu (°C)", value=29.5)
+    spora = st.sidebar.number_input("Indeks Spora", value=4.5)
 
-    st.sidebar.header("⚙️ Input Parameter Proteksi")
-    st.sidebar.subheader("1. Aplikasi Semprot")
-    dosis_basis = st.sidebar.number_input("Dosis Standard (ml/L)", value=2.0, step=0.1)
-    tegangan_permukaan = st.sidebar.number_input("Tegangan Permukaan (mN/m)", value=32.0, step=1.0)
-    tekanan_bar = st.sidebar.number_input("Tekanan Pompa Sanchin (Bar)", value=25.0, step=1.0)
+    engine = ZuhriPillarII()
+    eff = engine.calculate_efficacy(dosis, tegangan, vpd, tekanan)
+    disrupt = engine.calculate_spore_disruption(rh, temp, spora)
 
-    st.sidebar.subheader("2. Lingkungan & Patogen")
-    vpd_input = st.sidebar.number_input("VPD Lahan (kPa)", value=1.031, step=0.1)
-    rh_input = st.sidebar.number_input("Kelembapan Udara (RH %)", value=75.0, step=1.0)
-    temp_input = st.sidebar.number_input("Suhu Udara (°C)", value=29.5, step=0.5)
-    spore_index = st.sidebar.number_input("Indeks Kepadatan Spora (1-10)", value=4.5, step=0.5)
+    c1, c2 = st.columns(2)
+    c1.metric("Dosis Optimal", f"{eff['optimized_dose_ml_per_l']} ml/L")
+    c2.metric("Frekuensi Disruptif", f"{disrupt['disruption_frequency_khz']} kHz")
+    c2.metric("Indeks Risiko Jamur", disrupt["fungal_risk_index"])
 
-    engine_p2 = ZuhriPillarII()
-    efficacy_data = engine_p2.calculate_efficacy(dosis_basis, tegangan_permukaan, vpd_input, tekanan_bar)
-    spore_data = engine_p2.calculate_spore_disruption(rh_input, temp_input, spore_index)
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.subheader("🧪 Amplifikasi Bio-Pestisida")
-        st.metric("Dosis Optimal Terkalibrasi", f"{efficacy_data['optimized_dose_ml_per_l']} ml/L")
-        st.metric("Amplifikasi Efikasi", f"{efficacy_data['efficacy_boost_percent']} %")
-        st.metric("Faktor Penetrasi Kutikula", efficacy_data["penetration_factor"])
-
-    with col2:
-        st.subheader("🔬 Resonansi Pemutus Spora Jamur")
-        st.metric("Indeks Risiko Jamur", spore_data["fungal_risk_index"])
-        st.metric("Frekuensi Disruptif Target", f"{spore_data['disruption_frequency_khz']} kHz")
-        st.metric("Rekomendasi Durasi Radiasi", f"{spore_data['recommended_duration_min']} Menit")
-
-    st.markdown("---")
-    if spore_data["fungal_risk_index"] > 3.0:
-        st.warning("⚠️ **Peringatan Risiko Jamur Tinggi:** Diperlukan aktivasi pemancar frekuensi atau penyemprotan protektif segera.")
-    else:
-        st.success("✅ **Kondisi Aman:** Risiko infeksi spora patogen berada dalam batas ambang toleransi aman.")
-
-# ------------------------------------------
-# MODUL 3: PILAR I
-# ------------------------------------------
-else:
+elif modul_pilihan == "Pilar I: Manajemen Tanah & Nutrisi":
     st.title("🪨 Smart Farming Engine: Pilar I")
-    st.caption("Bio-Resonance Humic Synthesizer & Organic-Spectrum Nutrient Enhancer (π_eff)")
+    st.sidebar.subheader("Input Tanah & Nutrisi")
+    organik = st.sidebar.number_input("Bahan Organik (%)", value=4.5)
+    ph = st.sidebar.number_input("pH Tanah", value=6.2)
+    air = st.sidebar.number_input("Kadar Air (%)", value=55.0)
+    npk = st.sidebar.number_input("Input NPK (kg/ha)", value=150.0)
+    ec = st.sidebar.number_input("EC Tanah (mS/cm)", value=1.8)
 
-    st.sidebar.header("⚙️ Input Parameter Tanah & Nutrisi")
-    st.sidebar.subheader("1. Kondisi Fisik & Kimia Tanah")
-    baha_organik = st.sidebar.number_input("Bahan Organik / Kohe (%)", value=4.5, step=0.5)
-    ph_tanah = st.sidebar.number_input("pH Tanah", value=6.2, step=0.1)
-    kadar_air = st.sidebar.number_input("Kadar Air Tanah (%)", value=55.0, step=5.0)
+    engine = ZuhriPillarI()
+    humic = engine.calculate_humic_synthesis(organik, ph, air)
+    nutrisi = engine.calculate_nutrient_availability(npk, ec, air)
 
-    st.sidebar.subheader("2. Aplikasi Nutrisi & Pupuk")
-    npk_input = st.sidebar.number_input("Input Pupuk Majemuk/NPK (kg/ha)", value=150.0, step=10.0)
-    ec_tanah_p1 = st.sidebar.number_input("EC Tanah (mS/cm)", value=1.8, step=0.1)
+    c1, c2 = st.columns(2)
+    c1.metric("Laju Sintesis Humat", f"{humic['humic_synthesis_rate_kg_ha']} kg/ha/hari")
+    c1.metric("Resonansi pH", humic["ph_resonance_factor"])
+    c2.metric("Efisiensi Serapan NPK", f"{nutrisi['absorption_efficiency_pct']} %")
 
-    engine_p1 = ZuhriPillarI()
-    humic_data = engine_p1.calculate_humic_synthesis(baha_organik, ph_tanah, kadar_air)
-    nutrient_data = engine_p1.calculate_nutrient_availability(npk_input, ec_tanah_p1, kadar_air)
+else:
+    st.title("📦 Smart Farming Engine: Pilar IV")
+    st.caption("Monthly Yield Calculation Matrix & Community Yield Distribution Router")
 
-    col1, col2 = st.columns(2)
+    st.sidebar.header("⚙️ Input Panen & Harga")
+    total_panen = st.sidebar.number_input("Total Panen Bulanan (Kg)", value=850.0, step=10.0)
+    harga_pasar = st.sidebar.number_input("Harga Pasar Aktual (Rp/Kg)", value=35000.0, step=1000.0)
+    st.sidebar.markdown("---")
+    st.sidebar.header("🤝 Alokasi Distribusi")
+    persen_tabarot = st.sidebar.slider("Alokasi Kas/Bantuan TABAROT (%)", min_value=0.0, max_value=50.0, value=15.0, step=1.0)
 
-    with col1:
-        st.subheader("🧪 Sintesis Asam Humat (Bedengan)")
-        st.metric("Laju Sintesis Humat", f"{humic_data['humic_synthesis_rate_kg_ha']} kg/ha/hari")
-        st.metric("Indeks Stabilitas Pori", humic_data["pore_stability_index"])
-        st.metric("Faktor Resonansi pH", humic_data["ph_resonance_factor"])
+    engine_p4 = ZuhriPillarIV()
+    matrix = engine_p4.calculate_yield_matrix(total_panen, harga_pasar)
+    dist = engine_p4.route_distribution(matrix["gross_revenue_rp"], persen_tabarot)
 
-    with col2:
-        st.subheader("⚡ Efisiensi Serapan Nutrisi (NPK)")
-        st.metric("Efisiensi Serapan Akar", f"{nutrient_data['absorption_efficiency_pct']} %")
-        st.metric("Serapan NPK Efektif", f"{nutrient_data['effective_npk_absorbed_kg']} kg/ha")
-        st.metric("Indeks Kelarutan Ionik", nutrient_data["ionic_solubility_index"])
+    st.subheader("📊 Hasil Panen & Valuasi Ekonomi")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Kualitas Grade A (%)", f"{matrix['grade_a_percentage']} %")
+    col2.metric("Estimasi Grade A (Kg)", f"{matrix['grade_a_kg']} Kg")
+    col3.metric("Gross Revenue (Kotor)", f"Rp {matrix['gross_revenue_rp']:,.0f}")
 
     st.markdown("---")
-    if ph_tanah < 5.5:
-        st.warning("⚠️ **Kondisi Tanah Asam:** Diperlukan penambahan dolomit/kapur pertanian untuk menaikkan faktor resonansi pH dan kelarutan NPK.")
-    elif ph_tanah > 7.5:
-        st.warning("⚠️ **Kondisi Tanah Basa:** Lakukan penambahan bahan organik/kohe matang untuk menyeimbangkan stabilitas pori.")
-    else:
-        st.success("✅ **Kondisi Zona Perakaran Ideal:** pH dan struktur tanah berada pada taraf efisiensi penyerapan hara maksimal.")
+    st.subheader("⚖️ Alokasi Distribusi (Flux Balancer)")
+    c1, c2, c3 = st.columns(3)
+    
+    c1.info("🛠️ **Reinvestasi Lahan**")
+    c1.write(f"**Rp {dist['farm_reinvestment_rp']:,.0f}**")
+    c1.caption("Pembelian input, paranet, maintenance Sanchin & Cultivator.")
+
+    c2.success("🏠 **Perencanaan Rumah Tangga**")
+    c2.write(f"**Rp {dist['household_planning_rp']:,.0f}**")
+    c2.caption("Manajemen keuangan keluarga & tabungan pendidikan anak.")
+
+    c3.warning("🤝 **Kas TABAROT**")
+    c3.write(f"**Rp {dist['tabarot_fund_rp']:,.0f}**")
+    c3.caption("Dana bantuan darurat, sosial & kegiatan relawan pemuda.")
